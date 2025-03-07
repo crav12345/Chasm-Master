@@ -51,14 +51,16 @@ public class GameplayAppState : IAppState
 
     private IEnumerator LoadMainMenu(Dependencies dependencies)
     {
-        // TODO: Fade out.
         var audioSource = _dependencies.Common.AudioSource;
-        audioSource.Stop();
+        yield return AudioUtils.FadeAudio(audioSource, 1.0f, 0.0f, 1.5f);
 
-        yield return new WaitForSeconds(2);
-
-        var loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Single);
+        var loadOp = SceneManager.LoadSceneAsync("GameplayScene", LoadSceneMode.Single);
         yield return loadOp;
+
+        var gameplayScene = GameObject.Find("GameplayScene");
+        var riddleSystem = gameplayScene.GetComponent<RiddleSystem>();
+        
+        yield return riddleSystem.GetRiddle();
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
     }
