@@ -14,6 +14,8 @@ public class MainMenuAppState : IAppState
     }
 
     private Dependencies _dependencies;
+    private GameplayAppState.Dependencies _gameplayDependencies;
+    private MainMenuPresenter _presenter;
 
     public IEnumerator Enter(AppState source, object data)
     {
@@ -25,6 +27,7 @@ public class MainMenuAppState : IAppState
         }
 
         _dependencies = newDependencies;
+        _gameplayDependencies = null;
 
         yield return LoadMainMenu(_dependencies);
     }
@@ -33,11 +36,21 @@ public class MainMenuAppState : IAppState
     {
         _dependencies.Common.LoadingOverlay.SetActive(true);
         
+        if (destination == AppState.Gameplay)
+        {
+            return _gameplayDependencies;
+        }
+
         return new object();
     }
 
     public AppState TryGetTransition()
     {
+        if (_gameplayDependencies != null)
+        {
+            return AppState.Gameplay;
+        }
+
         return AppState.MainMenu;
     }
 
@@ -53,9 +66,36 @@ public class MainMenuAppState : IAppState
         var loadOp = SceneManager.LoadSceneAsync("MainMenuView", LoadSceneMode.Single);
         yield return loadOp;
 
-        var presenter = GameObject.Find("MainMenu").GetComponent<MainMenuPresenter>();
-        presenter.Initialize();
+        loadOp = SceneManager.LoadSceneAsync("MainMenuScene", LoadSceneMode.Additive);
+        yield return loadOp;
+
+        loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Additive);
+        yield return loadOp;
+        
+        var inputListener = GameObject.Find("MainMenuScene").GetComponent<InputListener>();
+        _presenter = GameObject.Find("MainMenu").GetComponent<MainMenuPresenter>();
+        _presenter.MainMenuClosed += OnMainMenuClosed;
+        _presenter.Initialize(inputListener);
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
+
+        yield return new WaitForSeconds(7);
+
+        inputListener.Initialize();
+    }
+
+    private void DeregisterListeners()
+    {
+        _presenter.MainMenuClosed -= OnMainMenuClosed;
+    }
+
+    private void OnMainMenuClosed()
+    {
+        DeregisterListeners();
+        
+        _gameplayDependencies = new GameplayAppState.Dependencies
+        {
+            Common = _dependencies.Common
+        };
     }
 }

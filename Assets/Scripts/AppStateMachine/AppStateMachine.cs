@@ -29,6 +29,7 @@ public class AppStateMachine : MonoBehaviour
         {
             { AppState.Entry, new EntryAppState(entryDependencies) },
             { AppState.MainMenu, new MainMenuAppState() },
+            { AppState.Gameplay, new GameplayAppState() },
         };
     }
 
