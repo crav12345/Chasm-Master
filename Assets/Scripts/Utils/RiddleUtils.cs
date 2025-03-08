@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System;
 
 public class ChatGptReq
 {
@@ -26,7 +27,7 @@ public class ChatGptRiddle
 
 public static class RiddleUtils
 {
-    private const string SYSTEM_PROMPT = "You are a sinister old man that gives riddles.";
+    private const string SYSTEM_PROMPT = "You are a wise old man that gives riddles.";
     private const string RIDDLE_PROMPT = "Give me a unique riddle and its answer in this format: Riddle: <riddle> Answer: <answer>";
     private const string API_KEY = "api_key";
     private const string API_URL = "https://api.openai.com/v1/chat/completions";
@@ -74,22 +75,23 @@ public static class RiddleUtils
         }
     }
 
-    public static IEnumerator CheckAnswer(ChatGptRiddle chatGptRiddle, string playerAnswer, bool result)
+    public static IEnumerator CheckAnswer(ChatGptRiddle chatGptRiddle, string playerAnswer, Action<bool> callback)
     {
+        var result = false;
         var prompt = $"I asked the player this riddle: \"{chatGptRiddle.Riddle}\". The correct answer is \"{chatGptRiddle.Answer}\". The player answered: \"{playerAnswer}\". Is their answer correct? Reply with only 'Yes' or 'No'.";
-
-        var requestData = new
+        
+        var requestData = new ChatGptReq
         {
-            model = "gpt-4-turbo",
-            messages = new[]
+            model = "gpt-4o",
+            messages = new ChatGptMessage[]
             {
-                new { role = "system", content = SYSTEM_PROMPT },
-                new { role = "user", content = prompt }
+                new() { role = "system", content = SYSTEM_PROMPT },
+                new() { role = "user", content = prompt }
             },
             max_tokens = 5
         };
 
-        string jsonData = JsonUtility.ToJson(requestData);
+        var jsonData = JsonConvert.SerializeObject(requestData);
 
         using UnityWebRequest request = new UnityWebRequest(API_URL, "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
@@ -104,21 +106,19 @@ public static class RiddleUtils
         {
             string response = request.downloadHandler.text;
             JObject jsonResponse = JObject.Parse(response);
+            
             string aiResponse = jsonResponse["choices"][0]["message"]["content"].ToString().Trim();
 
-            if (aiResponse.ToLower() == "yes")
+            if (aiResponse.ToLower().Contains("yes"))
             {
                 result = true;
-            }
-            else
-            {
-                result = false;
             }
         }
         else
         {
-            result = false;
             Debug.LogError("Error: " + request.error);
         }
+
+        callback?.Invoke(result);
     }
 }

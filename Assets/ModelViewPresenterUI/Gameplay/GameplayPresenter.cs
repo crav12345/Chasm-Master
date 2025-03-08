@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,22 +8,30 @@ public class GameplayPresenter : MonoBehaviour
     [SerializeField] private Canvas _dialogueCanvas;
     [SerializeField] private TextMeshProUGUI _dialogueText;
     [SerializeField] private Canvas _inputCanvas;
+    [SerializeField] private TMP_InputField _inputField;
 
     private RiddleSystem _riddleSystem;
+    private GameplayInputSystem _inputSystem;
 
-    public void Initialize(RiddleSystem riddleSystem)
+    public void Initialize(RiddleSystem riddleSystem, GameplayInputSystem inputSystem)
     {
+        _inputSystem = inputSystem;
+        _inputSystem.ReturnPressed += OnReturnPressed;
+
         _riddleSystem = riddleSystem;
-        _riddleSystem.RiddleReceived += OnRiddleReceived;
         _riddleSystem.AskedForRiddle += OnAskedForRiddle;
+        _riddleSystem.RiddleReceived += OnRiddleReceived;
+        _riddleSystem.AnswerChecked += OnAnswerChecked;
 
         StartCoroutine(StartTutorial());
     }
 
     private void OnDestroy()
     {
-        _riddleSystem.RiddleReceived -= OnRiddleReceived;
+        _inputSystem.ReturnPressed -= OnReturnPressed;
         _riddleSystem.AskedForRiddle -= OnAskedForRiddle;
+        _riddleSystem.RiddleReceived -= OnRiddleReceived;
+        _riddleSystem.AnswerChecked -= OnAnswerChecked;
     }
 
     private IEnumerator StartTutorial()
@@ -51,5 +60,27 @@ public class GameplayPresenter : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         _inputCanvas.enabled = true;
+    }
+
+    private void OnReturnPressed()
+    {
+        if (!_riddleSystem.AwaitingAnswer)
+        {
+            return;
+        }
+
+        _inputCanvas.enabled = false;
+        _riddleSystem.SubmitAnswer(_inputField.text);
+    }
+
+    private void OnAnswerChecked(bool answerAccepted)
+    {
+        if (answerAccepted)
+        {
+            _dialogueText.text = "Correct!";
+            return;
+        }
+
+        _dialogueText.text = "Incorrect!";
     }
 }

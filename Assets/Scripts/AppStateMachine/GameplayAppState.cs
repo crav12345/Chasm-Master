@@ -67,7 +67,7 @@ public class GameplayAppState : IAppState
         var inputSystem = gameplayScene.GetComponent<GameplayInputSystem>();
         
         _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
-        _gameplayPresenter.Initialize(riddleSystem);
+        _gameplayPresenter.Initialize(riddleSystem, inputSystem);
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
