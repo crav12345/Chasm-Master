@@ -77,7 +77,7 @@ public class GameplayPresenter : MonoBehaviour
     {
         if (answerAccepted)
         {
-            _dialogueText.text = "Correct!";
+            _dialogueText.text = "That is correct! You've proven your wit adventurer. You may cross my chasm.";
             return;
         }
 
