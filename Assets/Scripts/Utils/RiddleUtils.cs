@@ -29,7 +29,7 @@ public static class RiddleUtils
 {
     private const string SYSTEM_PROMPT = "You are a wise old man that gives riddles.";
     private const string RIDDLE_PROMPT = "Give me a unique riddle and its answer in this format: Riddle: <riddle> Answer: <answer>";
-    private const string API_KEY = "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";
+    private const string API_KEY = "api_key";
     private const string API_URL = "https://api.openai.com/v1/chat/completions";
 
     public static IEnumerator GenerateRiddle(ChatGptRiddle chatGptRiddle)
