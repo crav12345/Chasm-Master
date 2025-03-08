@@ -15,6 +15,7 @@ public class GameplayAppState : IAppState
 
     private Dependencies _dependencies;
     private MainMenuAppState.Dependencies _mainMenuDependencies;
+    private GameplayPresenter _gameplayPresenter;
 
     public IEnumerator Enter(AppState source, object data)
     {
@@ -57,12 +58,19 @@ public class GameplayAppState : IAppState
         var loadOp = SceneManager.LoadSceneAsync("GameplayScene", LoadSceneMode.Single);
         yield return loadOp;
 
+        loadOp = SceneManager.LoadSceneAsync("GameplayView", LoadSceneMode.Additive);
+        yield return loadOp;
+
         var gameplayScene = GameObject.Find("GameplayScene");
         var riddleSystem = gameplayScene.GetComponent<RiddleSystem>();
+        var gameplayAudio = gameplayScene.GetComponent<GameplayAudioSystem>();
         
-        yield return riddleSystem.GetRiddle();
+        _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
+        _gameplayPresenter.Initialize(riddleSystem);
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
+
+        gameplayAudio.Initialize(audioSource);
     }
 
     private void OnGameQuit()
