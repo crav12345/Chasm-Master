@@ -8,11 +8,14 @@ public class GameplayPresenter : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _dialogueText;
 
     private RiddleSystem _riddleSystem;
+    private GameplayInputSystem _inputSystem;
 
-    public void Initialize(RiddleSystem riddleSystem)
+    public void Initialize(GameplayInputSystem inputSystem, RiddleSystem riddleSystem)
     {
+        _inputSystem = inputSystem;
         _riddleSystem = riddleSystem;
 
+        _inputSystem.ReturnPressed += OnReturnPressed;
         _riddleSystem.RiddleReceived += OnRiddleReceived;
 
         StartCoroutine(StartTutorial());
@@ -20,6 +23,7 @@ public class GameplayPresenter : MonoBehaviour
 
     private void OnDestroy()
     {
+        _inputSystem.ReturnPressed -= OnReturnPressed;
         _riddleSystem.RiddleReceived -= OnRiddleReceived;
     }
 
@@ -35,5 +39,10 @@ public class GameplayPresenter : MonoBehaviour
     private void OnRiddleReceived()
     {
 
+    }
+
+    private void OnReturnPressed()
+    {
+        Debug.Log("Return pressed!");
     }
 }
