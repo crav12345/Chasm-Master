@@ -67,11 +67,12 @@ public class GameplayAppState : IAppState
         var inputSystem = gameplayScene.GetComponent<GameplayInputSystem>();
         
         _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
-        _gameplayPresenter.Initialize(inputSystem, riddleSystem);
+        _gameplayPresenter.Initialize(riddleSystem);
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
         gameplayAudio.Initialize(audioSource);
+        riddleSystem.Initialize(inputSystem);
     }
 
     private void OnGameQuit()

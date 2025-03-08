@@ -6,25 +6,23 @@ public class GameplayPresenter : MonoBehaviour
 {
     [SerializeField] private Canvas _dialogueCanvas;
     [SerializeField] private TextMeshProUGUI _dialogueText;
+    [SerializeField] private Canvas _inputCanvas;
 
     private RiddleSystem _riddleSystem;
-    private GameplayInputSystem _inputSystem;
 
-    public void Initialize(GameplayInputSystem inputSystem, RiddleSystem riddleSystem)
+    public void Initialize(RiddleSystem riddleSystem)
     {
-        _inputSystem = inputSystem;
         _riddleSystem = riddleSystem;
-
-        _inputSystem.ReturnPressed += OnReturnPressed;
         _riddleSystem.RiddleReceived += OnRiddleReceived;
+        _riddleSystem.AskedForRiddle += OnAskedForRiddle;
 
         StartCoroutine(StartTutorial());
     }
 
     private void OnDestroy()
     {
-        _inputSystem.ReturnPressed -= OnReturnPressed;
         _riddleSystem.RiddleReceived -= OnRiddleReceived;
+        _riddleSystem.AskedForRiddle -= OnAskedForRiddle;
     }
 
     private IEnumerator StartTutorial()
@@ -36,13 +34,22 @@ public class GameplayPresenter : MonoBehaviour
         _dialogueText.text = "Halt, adventurer! None shall cross my bridge without proving their wit. Answer me this riddle true, or turn back and rue! Fail, and the chasm shall be your road instead!";
     }
 
-    private void OnRiddleReceived()
+    private void OnAskedForRiddle()
     {
-
+        _dialogueText.text = "Hmmm...";
     }
 
-    private void OnReturnPressed()
+    private void OnRiddleReceived(ChatGptRiddle chatGptRiddle)
     {
-        Debug.Log("Return pressed!");
+        _dialogueText.text = chatGptRiddle.Riddle;
+
+        StartCoroutine(EnableInputField());
+    }
+
+    private IEnumerator EnableInputField()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        _inputCanvas.enabled = true;
     }
 }

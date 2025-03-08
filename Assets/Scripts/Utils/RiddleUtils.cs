@@ -61,7 +61,7 @@ public static class RiddleUtils
             JObject jsonResponse = JObject.Parse(response);
             
             string text = jsonResponse["choices"][0]["message"]["content"].ToString();
-
+            
             // Extract riddle and answer
             int riddleStart = text.IndexOf("Riddle:") + 7;
             int answerStart = text.IndexOf("Answer:");
@@ -91,36 +91,34 @@ public static class RiddleUtils
 
         string jsonData = JsonUtility.ToJson(requestData);
 
-        using (UnityWebRequest request = new UnityWebRequest(API_URL, "POST"))
+        using UnityWebRequest request = new UnityWebRequest(API_URL, "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
+            string response = request.downloadHandler.text;
+            JObject jsonResponse = JObject.Parse(response);
+            string aiResponse = jsonResponse["choices"][0]["message"]["content"].ToString().Trim();
 
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
+            if (aiResponse.ToLower() == "yes")
             {
-                string response = request.downloadHandler.text;
-                JObject jsonResponse = JObject.Parse(response);
-                string aiResponse = jsonResponse["choices"][0]["message"]["content"].ToString().Trim();
-
-                if (aiResponse.ToLower() == "yes")
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
+                result = true;
             }
             else
             {
                 result = false;
-                Debug.LogError("Error: " + request.error);
             }
+        }
+        else
+        {
+            result = false;
+            Debug.LogError("Error: " + request.error);
         }
     }
 }

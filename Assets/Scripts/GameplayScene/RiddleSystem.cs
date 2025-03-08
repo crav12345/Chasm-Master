@@ -4,19 +4,53 @@ using UnityEngine;
 
 public class RiddleSystem : MonoBehaviour
 {
-    public event Action RiddleReceived;
+    public event Action AskedForRiddle;
+    public event Action<ChatGptRiddle> RiddleReceived;
 
     private ChatGptRiddle _currentRiddle;
+    private GameplayInputSystem _inputSystem;
+    private bool _gettingRiddle;
+    private bool _awaitingAnswer;
 
-    public void Initialize()
+    public void Initialize(GameplayInputSystem inputSystem)
     {
-        StartCoroutine(GetRiddle());        
+        _gettingRiddle = false;
+        _awaitingAnswer = false;
+
+        _currentRiddle = new();
+
+        _inputSystem = inputSystem;
+        _inputSystem.ReturnPressed += OnReturnPressed;
+    }
+
+    private void OnReturnPressed()
+    {
+        if (_gettingRiddle)
+        {
+            return;
+        }
+
+        if (_awaitingAnswer)
+        {
+            return;
+        }
+
+        StartCoroutine(GetRiddle());
     }
 
     private IEnumerator GetRiddle()
     {
-        yield return RiddleUtils.GenerateRiddle(_currentRiddle);
+        _gettingRiddle = true;
 
-        RiddleReceived?.Invoke();
+        AskedForRiddle?.Invoke();
+        
+        yield return RiddleUtils.GenerateRiddle(_currentRiddle);
+        
+        _gettingRiddle = false;
+        _awaitingAnswer = true;
+
+        Debug.Log(_currentRiddle.Answer);
+
+        RiddleReceived?.Invoke(_currentRiddle);
     }
 }
