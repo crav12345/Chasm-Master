@@ -214,7 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d1f3a1b9b274cc1877b174da6807ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _songHideDorianConcept: {fileID: 8300000, guid: 397227df65feb47fbb843b4a8714bacd, type: 3}
+  _gameplayMusic: {fileID: 8300000, guid: 397227df65feb47fbb843b4a8714bacd, type: 3}
+  _menuMusic: {fileID: 8300000, guid: 39de3fe7dc3ad4d75a4bc221c79ac61d, type: 3}
 --- !u!114 &392449395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,13 +329,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1153302293}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.39696202, z: -0, w: 0.91783506}
   m_LocalPosition: {x: 1.91, y: -2.95, z: -6.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 392449392}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -46.777, z: 0}
 --- !u!1 &1877636217
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +467,7 @@ Transform:
   m_GameObject: {fileID: 2065986458}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.91, y: -2.95, z: 1.79}
+  m_LocalPosition: {x: -0.14, y: -2.95, z: 1.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -72,20 +72,23 @@ public class GameplayAppState : IAppState
         var paladinSystem = gameplayScene.GetComponent<PaladinSystem>();
         var pos = environment.transform.position;
 
-        environment.transform.position = new Vector3(pos.x, pos.y, 14.09f);
+        environment.transform.position = new Vector3(pos.x, pos.y, 17.09f);
 
         _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
         _gameplayPresenter.Initialize(riddleSystem);
+        _gameplayPresenter.FadedOut += OnFadedOut;
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
-        gameplayAudio.Initialize(audioSource);
+        gameplayAudio.Initialize(audioSource, riddleSystem);
         riddleSystem.Initialize(inputSystem);
         paladinSystem.Initialize(riddleSystem);
     }
 
-    private void OnGameQuit()
+    private void OnFadedOut()
     {
+        _gameplayPresenter.FadedOut -= OnFadedOut;
+
         _mainMenuDependencies = new MainMenuAppState.Dependencies
         {
             Common = _dependencies.Common

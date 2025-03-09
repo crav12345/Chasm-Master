@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/ModelViewPresenterUI/MainMenu/MainMenuView.unity
+    path: Assets/UI/MainMenu/MainMenuView.unity
     guid: 4bda58fb855ff484dbe0f6998bebe6ad
   - enabled: 1
     path: Assets/Scenes/Environment.unity
@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenuScene.unity
     guid: bd11126fba0044430bbeabc160422e79
   - enabled: 1
-    path: Assets/ModelViewPresenterUI/Gameplay/GameplayView.unity
+    path: Assets/UI/Gameplay/GameplayView.unity
     guid: 44a3bba4e7ca44fd4ad9e0b0c04a9e37
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

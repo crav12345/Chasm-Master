@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PaladinSystem : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class PaladinSystem : MonoBehaviour
         _riddleSystem.RiddlePassed += OnRiddlePassed;
         _riddleSystem.RiddleFailed += OnRiddleFailed;
 
-        StartCoroutine(MoveToPosition(_idleTarget));
+        StartCoroutine(MoveToPosition(_idleTarget, 2f));
     }
 
     private void OnDestroy()
@@ -26,7 +27,8 @@ public class PaladinSystem : MonoBehaviour
 
     private void OnRiddlePassed()
     {
-        StartCoroutine(MoveToPosition(_successTarget));
+        StartCoroutine(RotateTowards(_successTarget, 0.5f));
+        StartCoroutine(MoveToPosition(_successTarget, 5f));
     }
 
     private void OnRiddleFailed()
@@ -34,16 +36,34 @@ public class PaladinSystem : MonoBehaviour
 
     }
 
-    private IEnumerator MoveToPosition(Transform target)
+    private IEnumerator RotateTowards(Transform target, float duration)
     {
         var elapsed = 0f;
-        var duration = 2f;
+        var startRotation = _paladin.rotation;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            _paladin.rotation = Quaternion.Slerp(startRotation, target.rotation, elapsed/duration);
+
+            yield return null;
+        }
+
+        _paladin.rotation = target.rotation;
+    }
+
+    private IEnumerator MoveToPosition(Transform target, float duration)
+    {
+        var elapsed = 0f;
         var startPosition = _paladin.position;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
+
             _paladin.position = Vector3.Lerp(startPosition, target.position, elapsed/duration);
+            
             yield return null;
         }
 

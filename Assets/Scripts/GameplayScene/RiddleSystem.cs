@@ -8,7 +8,7 @@ public class RiddleSystem : MonoBehaviour
     public event Action<ChatGptRiddle> RiddleReceived;
     public event Action RiddlePassed;
     public event Action RiddleFailed;
-    public event Action AnswerSubmitted;
+    public event Action PlayerSubmittedAnswer;
 
     private bool _awaitingAnswer;
     private ChatGptRiddle _currentRiddle;
@@ -38,7 +38,7 @@ public class RiddleSystem : MonoBehaviour
 
         if (_awaitingAnswer)
         {
-            AnswerSubmitted?.Invoke();
+            PlayerSubmittedAnswer?.Invoke();
             return;
         }
 
@@ -66,6 +66,7 @@ public class RiddleSystem : MonoBehaviour
 
         _checkingAnswer = true;
 
+        yield return new WaitForSeconds(1);
         yield return RiddleUtils.CheckAnswer(_currentRiddle, input, OnCheckedAnswer);
         
         _checkingAnswer = false;
