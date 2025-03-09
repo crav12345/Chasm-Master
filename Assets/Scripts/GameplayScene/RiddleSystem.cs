@@ -6,9 +6,11 @@ public class RiddleSystem : MonoBehaviour
 {
     public event Action AskedForRiddle;
     public event Action<ChatGptRiddle> RiddleReceived;
-    public event Action<bool> AnswerChecked;
+    public event Action RiddlePassed;
+    public event Action RiddleFailed;
+    public event Action AnswerSubmitted;
 
-    public bool AwaitingAnswer;
+    private bool _awaitingAnswer;
     private ChatGptRiddle _currentRiddle;
     private GameplayInputSystem _inputSystem;
     private bool _gettingRiddle;
@@ -16,7 +18,7 @@ public class RiddleSystem : MonoBehaviour
 
     public void Initialize(GameplayInputSystem inputSystem)
     {
-        AwaitingAnswer = false;
+        _awaitingAnswer = false;
 
         _gettingRiddle = false;
         _checkingAnswer = false;
@@ -34,8 +36,9 @@ public class RiddleSystem : MonoBehaviour
             return;
         }
 
-        if (AwaitingAnswer)
+        if (_awaitingAnswer)
         {
+            AnswerSubmitted?.Invoke();
             return;
         }
 
@@ -59,7 +62,7 @@ public class RiddleSystem : MonoBehaviour
 
     private IEnumerator CheckAnswer(string input)
     {
-        AwaitingAnswer = false;
+        _awaitingAnswer = false;
 
         _checkingAnswer = true;
 
@@ -70,7 +73,13 @@ public class RiddleSystem : MonoBehaviour
 
     private void OnCheckedAnswer(bool answerAccepted)
     {
-        AnswerChecked?.Invoke(answerAccepted);
+        if (answerAccepted)
+        {
+            RiddlePassed?.Invoke();
+            return;
+        }
+
+        RiddleFailed?.Invoke();
     }
 
     private IEnumerator GetRiddle()
@@ -82,7 +91,7 @@ public class RiddleSystem : MonoBehaviour
         yield return RiddleUtils.GenerateRiddle(_currentRiddle);
         
         _gettingRiddle = false;
-        AwaitingAnswer = true;
+        _awaitingAnswer = true;
 
         Debug.Log(_currentRiddle.Answer);
 

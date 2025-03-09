@@ -13,25 +13,25 @@ public class GameplayPresenter : MonoBehaviour
     private RiddleSystem _riddleSystem;
     private GameplayInputSystem _inputSystem;
 
-    public void Initialize(RiddleSystem riddleSystem, GameplayInputSystem inputSystem)
+    public void Initialize(RiddleSystem riddleSystem)
     {
-        _inputSystem = inputSystem;
-        _inputSystem.ReturnPressed += OnReturnPressed;
-
         _riddleSystem = riddleSystem;
         _riddleSystem.AskedForRiddle += OnAskedForRiddle;
         _riddleSystem.RiddleReceived += OnRiddleReceived;
-        _riddleSystem.AnswerChecked += OnAnswerChecked;
+        _riddleSystem.AnswerSubmitted += OnAnswerSubmitted;
+        _riddleSystem.RiddlePassed += OnRiddlePassed;
+        _riddleSystem.RiddleFailed += OnRiddleFailed;
 
         StartCoroutine(StartTutorial());
     }
 
     private void OnDestroy()
     {
-        _inputSystem.ReturnPressed -= OnReturnPressed;
         _riddleSystem.AskedForRiddle -= OnAskedForRiddle;
+        _riddleSystem.AnswerSubmitted -= OnAnswerSubmitted;
         _riddleSystem.RiddleReceived -= OnRiddleReceived;
-        _riddleSystem.AnswerChecked -= OnAnswerChecked;
+        _riddleSystem.RiddlePassed -= OnRiddlePassed;
+        _riddleSystem.RiddleFailed -= OnRiddleFailed;
     }
 
     private IEnumerator StartTutorial()
@@ -62,25 +62,18 @@ public class GameplayPresenter : MonoBehaviour
         _inputCanvas.enabled = true;
     }
 
-    private void OnReturnPressed()
+    private void OnAnswerSubmitted()
     {
-        if (!_riddleSystem.AwaitingAnswer)
-        {
-            return;
-        }
-
         _inputCanvas.enabled = false;
-        _riddleSystem.SubmitAnswer(_inputField.text);
     }
 
-    private void OnAnswerChecked(bool answerAccepted)
+    private void OnRiddlePassed()
     {
-        if (answerAccepted)
-        {
-            _dialogueText.text = "That is correct! You've proven your wit adventurer. You may cross my chasm.";
-            return;
-        }
+        _dialogueText.text = "That is correct! You've proven your wit adventurer. You may cross my chasm.";
+    }
 
+    private void OnRiddleFailed()
+    {
         _dialogueText.text = "Incorrect!";
     }
 }

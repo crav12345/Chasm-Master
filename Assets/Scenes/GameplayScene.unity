@@ -186,6 +186,7 @@ Transform:
   m_Children:
   - {fileID: 1877636218}
   - {fileID: 1153302294}
+  - {fileID: 2065986459}
   - {fileID: 162509626}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -201,7 +202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357a6ca850d7a4700bc6dfa26f249508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AwaitingAnswer: 0
 --- !u!114 &392449394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,8 +239,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870578174d6894cfc8b243f48b11c076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _paladin: {fileID: 1877636217}
+  _paladin: {fileID: 1877636218}
   _idleTarget: {fileID: 1153302294}
+  _successTarget: {fileID: 2065986459}
 --- !u!1001 &572740872
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -313,7 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1153302294}
   m_Layer: 0
-  m_Name: PlayerIdleTarget
+  m_Name: PaladinIdleTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -440,6 +441,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 704fe7fa9e4ce4178a7d0b481d2ee6a8, type: 3}
   m_PrefabInstance: {fileID: 2040587512}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2065986458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2065986459}
+  m_Layer: 0
+  m_Name: PaladinSuccessTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2065986459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065986458}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.91, y: -2.95, z: 1.79}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 392449392}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

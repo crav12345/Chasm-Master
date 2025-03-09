@@ -28,10 +28,12 @@ public class ChatGptRiddle
 public static class RiddleUtils
 {
     private const string SYSTEM_PROMPT = "You are a wise old man that gives riddles.";
-    private const string RIDDLE_PROMPT = "Give me a unique riddle and its answer in this format: Riddle: <riddle> Answer: <answer>";
+    private const string RIDDLE_PROMPT = "Give me a common riddle and its answer in this format: Riddle: <riddle> Answer: <answer>";
     private const string API_KEY = "api_key";
     private const string API_URL = "https://api.openai.com/v1/chat/completions";
 
+    // TODO: Use ChatGPT to check answers, but maybe just save 200 riddles and their answers.
+    
     public static IEnumerator GenerateRiddle(ChatGptRiddle chatGptRiddle)
     {
         var requestData = new ChatGptReq
@@ -42,7 +44,7 @@ public static class RiddleUtils
                 new(){ role = "system", content = SYSTEM_PROMPT },
                 new(){ role = "user", content = RIDDLE_PROMPT }
             },
-            max_tokens = 150
+            max_tokens = 200
         };
 
         var jsonData = JsonConvert.SerializeObject(requestData);
