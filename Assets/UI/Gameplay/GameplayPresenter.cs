@@ -91,5 +91,7 @@ public class GameplayPresenter : MonoBehaviour
     private void OnRiddleFailed()
     {
         _dialogueText.text = "Incorrect!";
+
+        StartCoroutine(FadeOut());
     }
 }

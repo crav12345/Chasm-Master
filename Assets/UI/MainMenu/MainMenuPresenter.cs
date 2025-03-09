@@ -57,17 +57,21 @@ public class MainMenuPresenter : MonoBehaviour
 
     private void OnInputDetected()
     {
+        StopAllCoroutines();
         StartCoroutine(CloseMainMenu());
     }
 
     private IEnumerator CloseMainMenu()
     {
-        StopCoroutine(EnableBeginPrompt());
         _flashPrompt = false;
         _beginCanvasGroup.alpha = 0.0f;
         _beginCanvasGroup.GetComponentInParent<Canvas>().enabled = false;
+        
+        var startAlpha = _backgroundCanvasGroup.alpha;
+        var endAlpha = 1f;
+        var duration = 1f - startAlpha / endAlpha;
 
-        yield return PresenterUtils.FadeCanvasGroup(_backgroundCanvasGroup, 0.0f, 1.0f, 1.0f);
+        yield return PresenterUtils.FadeCanvasGroup(_backgroundCanvasGroup, startAlpha, endAlpha, duration);
 
         yield return new WaitForSeconds(1);
 
