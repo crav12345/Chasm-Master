@@ -47,7 +47,7 @@ public class PaladinSystem : MonoBehaviour
     {
         ToggleRagdoll(true);
 
-        var throwForce = 250f;
+        var throwForce = 100f;
         var throwDir = _throwTarget.position - _paladinTransform.position;
 
         foreach (var rb in _rigidBodies)
