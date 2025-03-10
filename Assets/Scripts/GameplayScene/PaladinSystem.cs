@@ -1,16 +1,26 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PaladinSystem : MonoBehaviour
 {
-    [SerializeField] private Transform _paladin;
+    public event Action<bool> ToggledRagdoll;
+
+    [SerializeField] private Transform _paladinTransform;
     [SerializeField] private Transform _idleTarget;
     [SerializeField] private Transform _successTarget;
     [SerializeField] private Animator _animator;
 
+    private Rigidbody[] _rigidBodies;
+
     private RiddleSystem _riddleSystem;
 
+    private void Awake()
+    {
+        _rigidBodies = _paladinTransform.GetComponentsInChildren<Rigidbody>();
+        ToggleRagdoll(false);
+    }
+    
     public void Initialize(RiddleSystem riddleSystem)
     {
         _riddleSystem = riddleSystem;
@@ -34,24 +44,24 @@ public class PaladinSystem : MonoBehaviour
 
     private void OnRiddleFailed()
     {
-
+        ToggleRagdoll(true);
     }
 
     private IEnumerator RotateTowards(Transform target, float duration)
     {
         var elapsed = 0f;
-        var startRotation = _paladin.rotation;
+        var startRotation = _paladinTransform.rotation;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
 
-            _paladin.rotation = Quaternion.Slerp(startRotation, target.rotation, elapsed/duration);
+            _paladinTransform.rotation = Quaternion.Slerp(startRotation, target.rotation, elapsed/duration);
 
             yield return null;
         }
 
-        _paladin.rotation = target.rotation;
+        _paladinTransform.rotation = target.rotation;
     }
 
     private IEnumerator MoveToPosition(Transform target, float duration)
@@ -59,19 +69,31 @@ public class PaladinSystem : MonoBehaviour
         _animator.SetBool("Walking", true);
 
         var elapsed = 0f;
-        var startPosition = _paladin.position;
+        var startPosition = _paladinTransform.position;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
 
-            _paladin.position = Vector3.Lerp(startPosition, target.position, elapsed/duration);
+            _paladinTransform.position = Vector3.Lerp(startPosition, target.position, elapsed/duration);
             
             yield return null;
         }
 
-        _paladin.position = target.position;
+        _paladinTransform.position = target.position;
         
         _animator.SetBool("Walking", false);
+    }
+
+    private void ToggleRagdoll(bool enabled)
+    {
+        foreach (var rigidBody in _rigidBodies)
+        {
+            rigidBody.isKinematic = !enabled;
+        }
+
+        _animator.enabled = !enabled;
+
+        ToggledRagdoll?.Invoke(enabled);
     }
 }
