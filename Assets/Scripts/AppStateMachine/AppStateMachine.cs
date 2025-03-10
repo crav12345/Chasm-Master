@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages IAppState implementations and transitions between them.
+/// </summary>
 public class AppStateMachine : MonoBehaviour
 {
+    /// <summary>
+    /// Interface for loading assets and controlling navigation in the game.
+    /// </summary>
     public interface IAppState
     {
         IEnumerator Enter(AppState source, object data);

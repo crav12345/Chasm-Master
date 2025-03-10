@@ -2,6 +2,11 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// In this game, UI presenters are initialized with a serires of models
+// (gameplay systems) which they listen to for events. They use those events
+// and the data pssed with them as queues to update the UI.
+/// </summary>
 public class MainMenuPresenter : MonoBehaviour
 {
     public event Action MainMenuClosed;

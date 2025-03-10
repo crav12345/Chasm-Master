@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for moving the paladin and its rigid bodies.
+/// </summary>
 public class PaladinSystem : MonoBehaviour
 {
     public event Action<bool> ToggledRagdoll;

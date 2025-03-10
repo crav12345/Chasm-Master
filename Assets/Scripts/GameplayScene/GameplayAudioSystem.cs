@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Manages the persistent audio source while we're in the gameplay scene.
+/// </summary>
 public class GameplayAudioSystem : MonoBehaviour
 {
     [SerializeField] private AudioClip _gameplayMusic;

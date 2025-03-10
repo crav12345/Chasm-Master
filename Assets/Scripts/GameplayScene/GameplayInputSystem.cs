@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Broadcasts user input events.
+/// </summary>
 public class GameplayInputSystem : MonoBehaviour
 {
     public event Action ReturnPressed;

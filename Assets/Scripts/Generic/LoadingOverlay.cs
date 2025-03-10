@@ -1,6 +1,9 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Interface for interacting with the persistent LoadingOverlay prefab.
+/// </summary>
 public class LoadingOverlay : MonoBehaviour
 {
     private const float TIME_BETWEEN_DOTS = 0.5f;
@@ -30,10 +33,5 @@ public class LoadingOverlay : MonoBehaviour
         _loadingCanvas.enabled = active;
 
         _elapsed = 0.0f;
-    }
-
-    public void SetLabelText(string text)
-    {
-        _loadingLabel.text = text;
     }
 }

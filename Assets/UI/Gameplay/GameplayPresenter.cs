@@ -3,6 +3,11 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// In this game, UI presenters are initialized with a serires of models
+// (gameplay systems) which they listen to for events. They use those events
+// and the data pssed with them as queues to update the UI.
+/// </summary>
 public class GameplayPresenter : MonoBehaviour
 {
     public event Action FadedOut;
@@ -14,7 +19,6 @@ public class GameplayPresenter : MonoBehaviour
     [SerializeField] private CanvasGroup _fadeCanvasGroup;
 
     private RiddleSystem _riddleSystem;
-    private GameplayInputSystem _inputSystem;
 
     public void Initialize(RiddleSystem riddleSystem)
     {

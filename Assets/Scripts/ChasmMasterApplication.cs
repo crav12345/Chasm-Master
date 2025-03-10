@@ -1,8 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Persistent entry point into the entire app. Initializes all systems at
-/// beginning of runtime.
+/// Persistent entry point into the game. Initializes all systems at
+/// beginning of runtime. Maintains persistent dependencies.
 /// </summary>
 public class ChasmMasterApplication : MonoBehaviour
 {

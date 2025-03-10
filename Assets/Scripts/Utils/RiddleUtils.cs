@@ -25,6 +25,13 @@ public class ChatGptRiddle
     public string Answer;
 }
 
+// TODO: Move this to backend to hide API key. Also, we can cache and avoid
+// redundant calls if we have cached riddles the player hasn't seen.
+
+/// <summary>
+/// Static class for retrieving riddles and evaluating user responses. This is
+/// done with OpenAI's GPT API.
+/// </summary>
 public static class RiddleUtils
 {
     private const string SYSTEM_PROMPT = "You are a wise old man that gives riddles.";

@@ -2,6 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Progression system responsible for broadcasting events about the riddle and
+// results.
+/// </summary>
 public class RiddleSystem : MonoBehaviour
 {
     public event Action AskedForRiddle;
@@ -10,9 +14,9 @@ public class RiddleSystem : MonoBehaviour
     public event Action RiddleFailed;
     public event Action PlayerSubmittedAnswer;
 
-    private bool _awaitingAnswer;
     private ChatGptRiddle _currentRiddle;
     private GameplayInputSystem _inputSystem;
+    private bool _awaitingAnswer;
     private bool _gettingRiddle;
     private bool _checkingAnswer;
 

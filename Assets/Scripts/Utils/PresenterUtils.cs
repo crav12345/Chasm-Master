@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Static class for reusable UI methods.
+/// </summary>
 public static class PresenterUtils
 {
     /// <summary>
