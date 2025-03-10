@@ -76,12 +76,12 @@ public class GameplayPresenter : MonoBehaviour
     {
         _dialogueText.text = "That is correct! You've proven your wit adventurer. You may cross my chasm.";
 
-        StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut(2));
     }
 
-    private IEnumerator FadeOut()
+    private IEnumerator FadeOut(float delay)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(delay);
         
         yield return PresenterUtils.FadeCanvasGroup(_fadeCanvasGroup, 0f, 1f, 2f);
 
@@ -92,6 +92,6 @@ public class GameplayPresenter : MonoBehaviour
     {
         _dialogueText.text = "Incorrect!";
 
-        StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut(5));
     }
 }

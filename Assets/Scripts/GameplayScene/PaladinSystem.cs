@@ -10,6 +10,7 @@ public class PaladinSystem : MonoBehaviour
     [SerializeField] private Transform _idleTarget;
     [SerializeField] private Transform _successTarget;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Transform _throwTarget;
 
     private Rigidbody[] _rigidBodies;
 
@@ -45,6 +46,14 @@ public class PaladinSystem : MonoBehaviour
     private void OnRiddleFailed()
     {
         ToggleRagdoll(true);
+
+        var throwForce = 250f;
+        var throwDir = _throwTarget.position - _paladinTransform.position;
+
+        foreach (var rb in _rigidBodies)
+        {
+            rb.AddForce(throwDir.normalized * throwForce, ForceMode.Impulse);
+        }
     }
 
     private IEnumerator RotateTowards(Transform target, float duration)
