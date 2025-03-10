@@ -90,7 +90,7 @@ public class GameplayPresenter : MonoBehaviour
 
     private void OnRiddleFailed()
     {
-        _dialogueText.text = "Incorrect!";
+        _dialogueText.text = "Wrong! A witless wanderer meets a fitting fate. Farewell, floundering fool!";
 
         StartCoroutine(FadeOut(5));
     }
