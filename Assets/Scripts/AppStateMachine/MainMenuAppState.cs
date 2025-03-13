@@ -78,7 +78,11 @@ public class MainMenuAppState : IAppState
         _presenter.Initialize(inputListener);
 
         RenderSettings.skybox = _dependencies.Common.SkyboxMat;
-        
+        RenderSettings.fog = true;
+        RenderSettings.fogMode = FogMode.Linear;
+        RenderSettings.fogStartDistance = 35;
+        RenderSettings.fogEndDistance = 350;
+
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
         yield return new WaitForSeconds(7);

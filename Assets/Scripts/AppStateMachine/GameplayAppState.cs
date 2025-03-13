@@ -75,6 +75,10 @@ public class GameplayAppState : IAppState
         _gameplayPresenter.FadedOut += OnFadedOut;
 
         RenderSettings.skybox = _dependencies.Common.SkyboxMat;
+        RenderSettings.fog = true;
+        RenderSettings.fogMode = FogMode.Linear;
+        RenderSettings.fogStartDistance = 35;
+        RenderSettings.fogEndDistance = 350;
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
