@@ -77,6 +77,8 @@ public class MainMenuAppState : IAppState
         _presenter.MainMenuClosed += OnMainMenuClosed;
         _presenter.Initialize(inputListener);
 
+        RenderSettings.skybox = _dependencies.Common.SkyboxMat;
+        
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
         yield return new WaitForSeconds(7);

@@ -10,6 +10,7 @@ public class ChasmMasterApplication : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private LoadingOverlay _loadingOverlay;
     [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private Material _skyboxMat;
 
     // Start is called before the first frame update
     private void Start()
@@ -22,7 +23,8 @@ public class ChasmMasterApplication : MonoBehaviour
         {
             Camera = _camera,
             LoadingOverlay = _loadingOverlay,
-            AudioSource = _audioSource
+            AudioSource = _audioSource,
+            SkyboxMat = _skyboxMat
         };
 
         _appStateMachine.Initialize(entryDependencies);

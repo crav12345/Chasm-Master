@@ -10,6 +10,7 @@ public class CommonDependencies
     public Camera Camera;
     public LoadingOverlay LoadingOverlay;
     public AudioSource AudioSource;
+    public Material SkyboxMat;
 }
 
 /// <summary>

@@ -74,6 +74,8 @@ public class GameplayAppState : IAppState
         _gameplayPresenter.Initialize(riddleSystem);
         _gameplayPresenter.FadedOut += OnFadedOut;
 
+        RenderSettings.skybox = _dependencies.Common.SkyboxMat;
+
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
         gameplayAudio.Initialize(audioSource, riddleSystem);

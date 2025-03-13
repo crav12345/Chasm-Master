@@ -513,6 +513,7 @@ MonoBehaviour:
   _camera: {fileID: 330585545}
   _loadingOverlay: {fileID: 297631747}
   _audioSource: {fileID: 1988052193}
+  _skyboxMat: {fileID: 2100000, guid: e391f00234292cc4f935308c11cf0e54, type: 2}
 --- !u!82 &1988052193
 AudioSource:
   m_ObjectHideFlags: 0
