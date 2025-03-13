@@ -56,12 +56,21 @@ public class MainMenuAppState : IAppState
 
     private IEnumerator LoadMainMenu(Dependencies dependencies)
     {
-        yield return new WaitForSeconds(3);
+        // TODO: Probably a better way to do this than all the if-statements.
+        var showFlare = dependencies.Common.VisitedMainMenu;
+
+        if (showFlare)
+        {
+            yield return new WaitForSeconds(3);
+        }
 
         var audioSource = _dependencies.Common.AudioSource;
         audioSource.Play();
 
-        yield return new WaitForSeconds(2);
+        if (showFlare)
+        {
+            yield return new WaitForSeconds(2);
+        }
 
         var loadOp = SceneManager.LoadSceneAsync("MainMenuView", LoadSceneMode.Single);
         yield return loadOp;
@@ -75,7 +84,7 @@ public class MainMenuAppState : IAppState
         var inputListener = GameObject.Find("MainMenuScene").GetComponent<InputListener>();
         _presenter = GameObject.Find("MainMenu").GetComponent<MainMenuPresenter>();
         _presenter.MainMenuClosed += OnMainMenuClosed;
-        _presenter.Initialize(inputListener);
+        _presenter.Initialize(inputListener, showFlare);
 
         RenderSettings.skybox = _dependencies.Common.SkyboxMat;
         RenderSettings.fog = true;
@@ -85,9 +94,14 @@ public class MainMenuAppState : IAppState
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
-        yield return new WaitForSeconds(7);
+        if (showFlare)
+        {
+            yield return new WaitForSeconds(7);
+        }
 
         inputListener.Initialize();
+        
+        _dependencies.Common.VisitedMainMenu = true;
     }
 
     private void DeregisterListeners()

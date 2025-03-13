@@ -17,9 +17,11 @@ public class MainMenuPresenter : MonoBehaviour
 
     private InputListener _inputListener;
     private bool _flashPrompt;
+    private bool _showFlare;
 
-    public void Initialize(InputListener inputListener)
+    public void Initialize(InputListener inputListener, bool showFlare)
     {
+        _showFlare = showFlare;
         _inputListener = inputListener;
         _inputListener.InputDetected += OnInputDetected;
 
@@ -37,14 +39,20 @@ public class MainMenuPresenter : MonoBehaviour
 
     private IEnumerator EnableTitle()
     {
-        yield return new WaitForSeconds(5);
+        if (_showFlare)
+        {
+            yield return new WaitForSeconds(5);
+        }
 
         _titleCanvasGroup.alpha = 1.0f;
     }
 
     private IEnumerator EnableBeginPrompt()
     {
-        yield return new WaitForSeconds(7);
+        if (_showFlare)
+        {
+            yield return new WaitForSeconds(7);
+        }
 
         while(_flashPrompt)
         {
@@ -55,7 +63,10 @@ public class MainMenuPresenter : MonoBehaviour
 
     private IEnumerator FadeBackground()
     {
-        yield return new WaitForSeconds(10);
+        if (_showFlare)
+        {
+            yield return new WaitForSeconds(10);
+        }
 
         yield return PresenterUtils.FadeCanvasGroup(_backgroundCanvasGroup, 1.0f, 0.0f, 1.0f);
     }
