@@ -25,7 +25,7 @@ public class ChasmMasterApplication : MonoBehaviour
             LoadingOverlay = _loadingOverlay,
             AudioSource = _audioSource,
             SkyboxMat = _skyboxMat,
-            VisitedMainMenu = false
+            ShowMenuFlare = true
         };
 
         _appStateMachine.Initialize(entryDependencies);

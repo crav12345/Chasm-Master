@@ -57,7 +57,7 @@ public class MainMenuAppState : IAppState
     private IEnumerator LoadMainMenu(Dependencies dependencies)
     {
         // TODO: Probably a better way to do this than all the if-statements.
-        var showFlare = dependencies.Common.VisitedMainMenu;
+        var showFlare = _dependencies.Common.ShowMenuFlare;
 
         if (showFlare)
         {
@@ -101,7 +101,7 @@ public class MainMenuAppState : IAppState
 
         inputListener.Initialize();
         
-        _dependencies.Common.VisitedMainMenu = true;
+        _dependencies.Common.ShowMenuFlare = false;
     }
 
     private void DeregisterListeners()

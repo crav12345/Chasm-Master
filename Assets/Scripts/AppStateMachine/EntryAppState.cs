@@ -11,7 +11,7 @@ public class CommonDependencies
     public LoadingOverlay LoadingOverlay;
     public AudioSource AudioSource;
     public Material SkyboxMat;
-    public bool VisitedMainMenu;
+    public bool ShowMenuFlare;
 }
 
 /// <summary>
