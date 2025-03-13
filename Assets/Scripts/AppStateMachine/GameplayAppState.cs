@@ -64,15 +64,11 @@ public class GameplayAppState : IAppState
         loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Additive);
         yield return loadOp;
 
-        var environment = GameObject.Find("Environment");
         var gameplayScene = GameObject.Find("GameplayScene");
         var riddleSystem = gameplayScene.GetComponent<RiddleSystem>();
         var gameplayAudio = gameplayScene.GetComponent<GameplayAudioSystem>();
         var inputSystem = gameplayScene.GetComponent<GameplayInputSystem>();
         var paladinSystem = gameplayScene.GetComponent<PaladinSystem>();
-        var pos = environment.transform.position;
-
-        environment.transform.position = new Vector3(pos.x, pos.y, 17.09f);
 
         _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
         _gameplayPresenter.Initialize(riddleSystem);
