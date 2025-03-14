@@ -6,27 +6,23 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
 
-public class ChatGptReq
+public class GetRiddleResponse
 {
-    public string model;
-    public ChatGptMessage[] messages;
-    public int max_tokens;
-}
-
-public class ChatGptMessage
-{
-    public string role;
-    public string content;
-}
-
-public class ChatGptRiddle
-{
+    public string RiddleId;
     public string Riddle;
     public string Answer;
 }
 
-// TODO: Move this to backend to hide API key. Also, we can cache and avoid
-// redundant calls if we have cached riddles the player hasn't seen.
+public class PostAnswerRequest
+{
+    public string RiddleId;
+    public string Answer;
+}
+
+public class PostAnswerResponse
+{
+    public bool Correct;
+}
 
 /// <summary>
 /// Static class for retrieving riddles and evaluating user responses. This is
@@ -34,100 +30,63 @@ public class ChatGptRiddle
 /// </summary>
 public static class RiddleUtils
 {
-    private const string SYSTEM_PROMPT = "You are a wise old man that gives riddles.";
-    private const string RIDDLE_PROMPT = "Give me a new riddle and its answer in this format: Riddle: <riddle> Answer: <answer>";
-    private const string API_KEY = "api_key";
-    private const string API_URL = "https://api.openai.com/v1/chat/completions";
+    private const string CHASM_MASTER_API_URL = "https://chasm-master-api-server-690085889009.us-east4.run.app/api";
 
-    // TODO: Use ChatGPT to check answers, but maybe just save 200 riddles and their answers.
-    
-    public static IEnumerator GenerateRiddle(ChatGptRiddle chatGptRiddle)
+    public static IEnumerator GetRiddle(Action<GetRiddleResponse> callback)
     {
-        var requestData = new ChatGptReq
-        {
-            model = "gpt-4o",
-            messages = new ChatGptMessage[]
-            {
-                new(){ role = "system", content = SYSTEM_PROMPT },
-                new(){ role = "user", content = RIDDLE_PROMPT }
-            },
-            max_tokens = 200
-        };
+        var response = new GetRiddleResponse();
+        var url = $"{CHASM_MASTER_API_URL}/riddles/";
 
-        var jsonData = JsonConvert.SerializeObject(requestData);
-
-        using UnityWebRequest request = new(API_URL, "POST");
-        var bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        using UnityWebRequest request = new(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
 
         yield return request.SendWebRequest();
-        
+
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string response = request.downloadHandler.text;
-            JObject jsonResponse = JObject.Parse(response);
-            
-            string text = jsonResponse["choices"][0]["message"]["content"].ToString();
-            
-            // Extract riddle and answer
-            int riddleStart = text.IndexOf("Riddle:") + 7;
-            int answerStart = text.IndexOf("Answer:");
-            chatGptRiddle.Riddle = text[riddleStart..answerStart].Trim();
-            chatGptRiddle.Answer = text[(answerStart + 7)..].Trim();
+            var responseJson = request.downloadHandler.text;   
+            response = JsonConvert.DeserializeObject<GetRiddleResponse>(responseJson);
         }
         else
         {
             Debug.LogError("Error: " + request.error);
         }
+
+        callback?.Invoke(response);
     }
 
-    public static IEnumerator CheckAnswer(ChatGptRiddle chatGptRiddle, string playerAnswer, Action<bool> callback)
+    public static IEnumerator CheckAnswer(string riddleId, string playerAnswer, Action<bool> callback)
     {
-        var result = false;
-        var prompt = $"I asked the player this riddle: \"{chatGptRiddle.Riddle}\". The correct answer is \"{chatGptRiddle.Answer}\". The player answered: \"{playerAnswer}\". Is their answer correct? Reply with only 'Yes' or 'No'.";
-        
-        var requestData = new ChatGptReq
+        var response = false;
+        var url = $"{CHASM_MASTER_API_URL}/answers/";
+        var bodyData = new PostAnswerRequest
         {
-            model = "gpt-4o",
-            messages = new ChatGptMessage[]
-            {
-                new() { role = "system", content = SYSTEM_PROMPT },
-                new() { role = "user", content = prompt }
-            },
-            max_tokens = 5
+            RiddleId = riddleId,
+            Answer = playerAnswer
         };
 
-        var jsonData = JsonConvert.SerializeObject(requestData);
-
-        using UnityWebRequest request = new UnityWebRequest(API_URL, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+        var bodyJson = JsonConvert.SerializeObject(bodyData);
+        using UnityWebRequest request = new(url, "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(bodyJson);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
 
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string response = request.downloadHandler.text;
-            JObject jsonResponse = JObject.Parse(response);
+            var responseJson = request.downloadHandler.text;
+            var responseObj = JsonConvert.DeserializeObject<PostAnswerResponse>(responseJson);
             
-            string aiResponse = jsonResponse["choices"][0]["message"]["content"].ToString().Trim();
-
-            if (aiResponse.ToLower().Contains("yes"))
-            {
-                result = true;
-            }
+            response = responseObj.Correct;
         }
         else
         {
             Debug.LogError("Error: " + request.error);
         }
 
-        callback?.Invoke(result);
+        callback?.Invoke(response);
     }
 }

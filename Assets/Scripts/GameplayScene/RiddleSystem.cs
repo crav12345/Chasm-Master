@@ -9,12 +9,12 @@ using UnityEngine;
 public class RiddleSystem : MonoBehaviour
 {
     public event Action AskedForRiddle;
-    public event Action<ChatGptRiddle> RiddleReceived;
+    public event Action<GetRiddleResponse> RiddleReceived;
     public event Action RiddlePassed;
     public event Action RiddleFailed;
     public event Action PlayerSubmittedAnswer;
 
-    private ChatGptRiddle _currentRiddle;
+    private GetRiddleResponse _currentRiddle;
     private GameplayInputSystem _inputSystem;
     private bool _awaitingAnswer;
     private bool _gettingRiddle;
@@ -71,7 +71,7 @@ public class RiddleSystem : MonoBehaviour
         _checkingAnswer = true;
 
         yield return new WaitForSeconds(1);
-        yield return RiddleUtils.CheckAnswer(_currentRiddle, input, OnCheckedAnswer);
+        yield return RiddleUtils.CheckAnswer(_currentRiddle.RiddleId, input, OnCheckedAnswer);
         
         _checkingAnswer = false;
     }
@@ -93,8 +93,12 @@ public class RiddleSystem : MonoBehaviour
 
         AskedForRiddle?.Invoke();
         
-        yield return RiddleUtils.GenerateRiddle(_currentRiddle);
-        
+        yield return RiddleUtils.GetRiddle(GetRiddleCallback);
+    }
+
+    private void GetRiddleCallback(GetRiddleResponse response)
+    {
+        _currentRiddle = response;
         _gettingRiddle = false;
         _awaitingAnswer = true;
 

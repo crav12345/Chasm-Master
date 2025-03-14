@@ -55,7 +55,7 @@ public class GameplayPresenter : MonoBehaviour
         _dialogueText.text = "Hmmm...";
     }
 
-    private void OnRiddleReceived(ChatGptRiddle chatGptRiddle)
+    private void OnRiddleReceived(GetRiddleResponse chatGptRiddle)
     {
         _dialogueText.text = chatGptRiddle.Riddle;
 
