@@ -19,11 +19,12 @@ public class RiddleSystem : MonoBehaviour
     private bool _awaitingAnswer;
     private bool _gettingRiddle;
     private bool _checkingAnswer;
+    private bool _gotRiddle;
 
     public void Initialize(GameplayInputSystem inputSystem)
     {
         _awaitingAnswer = false;
-
+        _gotRiddle = false;
         _gettingRiddle = false;
         _checkingAnswer = false;
 
@@ -51,6 +52,11 @@ public class RiddleSystem : MonoBehaviour
             return;
         }
 
+        if (_gotRiddle)
+        {
+            return;
+        }
+
         StartCoroutine(GetRiddle());
     }
 
@@ -66,6 +72,8 @@ public class RiddleSystem : MonoBehaviour
 
     private IEnumerator CheckAnswer(string input)
     {
+        _inputSystem.Listening = false;
+
         _awaitingAnswer = false;
 
         _checkingAnswer = true;
@@ -89,6 +97,8 @@ public class RiddleSystem : MonoBehaviour
 
     private IEnumerator GetRiddle()
     {
+        _inputSystem.Listening = false;
+        _gotRiddle = true;
         _gettingRiddle = true;
 
         AskedForRiddle?.Invoke();
@@ -102,8 +112,15 @@ public class RiddleSystem : MonoBehaviour
         _gettingRiddle = false;
         _awaitingAnswer = true;
 
-        Debug.Log(_currentRiddle.Answer);
+        StartCoroutine(EnableListenerAfterDelay(3.3f));
 
         RiddleReceived?.Invoke(_currentRiddle);
+    }
+
+    private IEnumerator EnableListenerAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        _inputSystem.Listening = true;
     }
 }

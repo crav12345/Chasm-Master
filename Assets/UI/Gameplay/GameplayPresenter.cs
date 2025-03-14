@@ -17,6 +17,7 @@ public class GameplayPresenter : MonoBehaviour
     [SerializeField] private Canvas _inputCanvas;
     [SerializeField] private TMP_InputField _inputField;
     [SerializeField] private CanvasGroup _fadeCanvasGroup;
+    [SerializeField] private Canvas _enterCanvas;
 
     private RiddleSystem _riddleSystem;
 
@@ -48,10 +49,13 @@ public class GameplayPresenter : MonoBehaviour
         _dialogueCanvas.enabled = true;
 
         _dialogueText.text = "Halt, adventurer! None shall cross my bridge without proving their wit. Answer me this riddle true, or turn back and rue! Fail, and the chasm shall be your road instead!";
+
+        _enterCanvas.enabled = true;
     }
 
     private void OnAskedForRiddle()
     {
+        _enterCanvas.enabled = false;
         _dialogueText.text = "Hmmm...";
     }
 
@@ -66,12 +70,14 @@ public class GameplayPresenter : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
 
+        _enterCanvas.enabled = true;
         _inputCanvas.enabled = true;
     }
 
     private void OnPlayerSubmittedAnswer()
     {
         _dialogueText.text = "Hmmm...";
+        _enterCanvas.enabled = false;
         _inputCanvas.enabled = false;
         _riddleSystem.SubmitAnswer(_inputField.text);
     }

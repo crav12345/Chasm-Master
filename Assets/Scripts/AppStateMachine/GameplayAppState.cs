@@ -85,6 +85,7 @@ public class GameplayAppState : IAppState
         gameplayAudio.Initialize(audioSource, riddleSystem);
         riddleSystem.Initialize(inputSystem);
         paladinSystem.Initialize(riddleSystem);
+        inputSystem.Initialize();
     }
 
     private void OnFadedOut()
