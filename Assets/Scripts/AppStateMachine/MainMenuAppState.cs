@@ -55,7 +55,7 @@ public class MainMenuAppState : IAppState
     }
 
     private IEnumerator LoadMainMenu(Dependencies dependencies)
-    {
+    {   
         // TODO: Probably a better way to do this than all the if-statements.
         var showFlare = _dependencies.Common.ShowMenuFlare;
 
@@ -66,6 +66,7 @@ public class MainMenuAppState : IAppState
 
         var audioSource = _dependencies.Common.AudioSource;
         audioSource.Play();
+        yield return WaitForAudio(audioSource.clip);
 
         if (showFlare)
         {
@@ -117,5 +118,13 @@ public class MainMenuAppState : IAppState
         {
             Common = _dependencies.Common
         };
+    }
+
+    private IEnumerator WaitForAudio(AudioClip clip)
+    {
+        while (clip.loadState != AudioDataLoadState.Loaded)
+        {
+            yield return null;
+        }
     }
 }
