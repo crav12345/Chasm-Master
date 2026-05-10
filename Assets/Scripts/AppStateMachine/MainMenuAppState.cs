@@ -35,7 +35,7 @@ public class MainMenuAppState : IAppState
     public object Exit(AppState destination)
     {
         _dependencies.Common.LoadingOverlay.SetActive(true);
-        
+
         if (destination == AppState.Gameplay)
         {
             return _gameplayDependencies;
@@ -55,7 +55,7 @@ public class MainMenuAppState : IAppState
     }
 
     private IEnumerator LoadMainMenu(Dependencies dependencies)
-    {   
+    {
         // TODO: Probably a better way to do this than all the if-statements.
         var showFlare = _dependencies.Common.ShowMenuFlare;
 
@@ -81,17 +81,11 @@ public class MainMenuAppState : IAppState
 
         loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Additive);
         yield return loadOp;
-        
+
         var inputListener = GameObject.Find("MainMenuScene").GetComponent<InputListener>();
         _presenter = GameObject.Find("MainMenu").GetComponent<MainMenuPresenter>();
         _presenter.MainMenuClosed += OnMainMenuClosed;
         _presenter.Initialize(inputListener, showFlare);
-
-        RenderSettings.skybox = _dependencies.Common.SkyboxMat;
-        RenderSettings.fog = true;
-        RenderSettings.fogMode = FogMode.Linear;
-        RenderSettings.fogStartDistance = 35;
-        RenderSettings.fogEndDistance = 350;
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 
@@ -101,7 +95,7 @@ public class MainMenuAppState : IAppState
         }
 
         inputListener.Initialize();
-        
+
         _dependencies.Common.ShowMenuFlare = false;
     }
 
@@ -113,7 +107,7 @@ public class MainMenuAppState : IAppState
     private void OnMainMenuClosed()
     {
         DeregisterListeners();
-        
+
         _gameplayDependencies = new GameplayAppState.Dependencies
         {
             Common = _dependencies.Common

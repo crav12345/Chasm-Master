@@ -55,13 +55,13 @@ public class GameplayAppState : IAppState
         var audioSource = _dependencies.Common.AudioSource;
         yield return AudioUtils.FadeAudio(audioSource, 1.0f, 0.0f, 1.5f);
 
-        var loadOp = SceneManager.LoadSceneAsync("GameplayScene", LoadSceneMode.Single);
+        var loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Single);
         yield return loadOp;
 
         loadOp = SceneManager.LoadSceneAsync("GameplayView", LoadSceneMode.Additive);
         yield return loadOp;
 
-        loadOp = SceneManager.LoadSceneAsync("Environment", LoadSceneMode.Additive);
+        loadOp = SceneManager.LoadSceneAsync("GameplayScene", LoadSceneMode.Additive);
         yield return loadOp;
 
         var gameplayScene = GameObject.Find("GameplayScene");
@@ -73,12 +73,6 @@ public class GameplayAppState : IAppState
         _gameplayPresenter = GameObject.Find("GameplayView").GetComponent<GameplayPresenter>();
         _gameplayPresenter.Initialize(riddleSystem);
         _gameplayPresenter.FadedOut += OnFadedOut;
-
-        RenderSettings.skybox = _dependencies.Common.SkyboxMat;
-        RenderSettings.fog = true;
-        RenderSettings.fogMode = FogMode.Linear;
-        RenderSettings.fogStartDistance = 35;
-        RenderSettings.fogEndDistance = 350;
 
         _dependencies.Common.LoadingOverlay.SetActive(false);
 

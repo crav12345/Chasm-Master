@@ -14,6 +14,7 @@ public class PaladinSystem : MonoBehaviour
     [SerializeField] private Transform _successTarget;
     [SerializeField] private Animator _animator;
     [SerializeField] private Transform _throwTarget;
+    [SerializeField] private float _throwForce = 40;
 
     private Rigidbody[] _rigidBodies;
 
@@ -24,7 +25,7 @@ public class PaladinSystem : MonoBehaviour
         _rigidBodies = _paladinTransform.GetComponentsInChildren<Rigidbody>();
         ToggleRagdoll(false);
     }
-    
+
     public void Initialize(RiddleSystem riddleSystem)
     {
         _riddleSystem = riddleSystem;
@@ -50,12 +51,11 @@ public class PaladinSystem : MonoBehaviour
     {
         ToggleRagdoll(true);
 
-        var throwForce = 100f;
         var throwDir = _throwTarget.position - _paladinTransform.position;
 
         foreach (var rb in _rigidBodies)
         {
-            rb.AddForce(throwDir.normalized * throwForce, ForceMode.Impulse);
+            rb.AddForce(throwDir.normalized * _throwForce, ForceMode.Impulse);
         }
     }
 
@@ -68,7 +68,7 @@ public class PaladinSystem : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            _paladinTransform.rotation = Quaternion.Slerp(startRotation, target.rotation, elapsed/duration);
+            _paladinTransform.rotation = Quaternion.Slerp(startRotation, target.rotation, elapsed / duration);
 
             yield return null;
         }
@@ -87,13 +87,13 @@ public class PaladinSystem : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            _paladinTransform.position = Vector3.Lerp(startPosition, target.position, elapsed/duration);
-            
+            _paladinTransform.position = Vector3.Lerp(startPosition, target.position, elapsed / duration);
+
             yield return null;
         }
 
         _paladinTransform.position = target.position;
-        
+
         _animator.SetBool("Walking", false);
     }
 
