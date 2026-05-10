@@ -12,9 +12,25 @@ public class ChasmMasterApplication : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Material _skyboxMat;
 
-    // Start is called before the first frame update
-    private void Start()
+    private bool _ready;
+
+    private void Update()
     {
+        if (_ready)
+        {
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+        {
+            RunApp();
+        }
+    }
+
+    private void RunApp()
+    {
+        _ready = true;
+
         DontDestroyOnLoad(gameObject);
 
         _loadingOverlay.SetActive(true);

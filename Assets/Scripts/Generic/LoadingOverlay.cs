@@ -10,11 +10,17 @@ public class LoadingOverlay : MonoBehaviour
 
     [SerializeField] private Canvas _loadingCanvas;
     [SerializeField] private TextMeshProUGUI _loadingLabel;
+    [SerializeField] private TextMeshProUGUI _pressPlayLabel;
 
     private float _elapsed;
 
     private void Update()
     {
+        if (!_loadingLabel.enabled)
+        {
+            return;
+        }
+
         _elapsed += Time.deltaTime;
 
         if (_elapsed < TIME_BETWEEN_DOTS)
@@ -31,7 +37,8 @@ public class LoadingOverlay : MonoBehaviour
     public void SetActive(bool active)
     {
         _loadingCanvas.enabled = active;
-
+        _pressPlayLabel.enabled = false;
+        _loadingLabel.enabled = true;
         _elapsed = 0.0f;
     }
 }
