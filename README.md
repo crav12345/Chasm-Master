@@ -8,6 +8,6 @@ Play [Chasm Master](https://christopher-ravosa.itch.io/chasm-master) on Christop
 
 ## TODO
 - Wait for user input on initial load sequence (otherwise audio will get desychronized)
-- Fix fog issues
-- Fix directional lighting issues
 - Add chasm cloud
+- Adjust loading overlay to cover whole scene
+- Fix server CORS issue
