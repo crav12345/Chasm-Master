@@ -11,3 +11,6 @@ Play [Chasm Master](https://christopher-ravosa.itch.io/chasm-master) on Christop
 - Add chasm cloud
 - Adjust loading overlay to cover whole scene
 - Fix server CORS issue
+- Add minimum thinking time for the Chasm Master
+- Add writeup to README and website
+- Add more riddles, duh
