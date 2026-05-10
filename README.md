@@ -7,9 +7,7 @@ _Chasm Master_ is a video game made with Unity. The design goal of _Chasm Master
 Play [Chasm Master](https://christopher-ravosa.itch.io/chasm-master) on Christopher's itch.io.
 
 ## TODO
-- Wait for user input on initial load sequence (otherwise audio will get desychronized)
 - Add chasm cloud
-- Adjust loading overlay to cover whole scene
 - Fix server CORS issue
 - Add minimum thinking time for the Chasm Master
 - Add writeup to README and website
