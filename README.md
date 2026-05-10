@@ -18,3 +18,4 @@ Play [Chasm Master](https://christopher-ravosa.itch.io/chasm-master) on Christop
 - Add leaderboards to backend
 - Migrate Chasm Master backend to public repository
 - Add more riddles, duh
+- Make it mobile friendly
