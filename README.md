@@ -13,6 +13,5 @@ Play [Chasm Master](https://christopher-ravosa.itch.io/chasm-master) on Christop
 - Get better art and do 9-tiling for dialogue boxes
 - Add live-service handling for seasonal content
 - Add leaderboards to backend
-- Migrate Chasm Master backend to public repository
 - Add more riddles, duh
 - Make it mobile friendly
